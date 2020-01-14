@@ -1,12 +1,23 @@
 import logging
+import re
+from typing import List
+from bs4 import BeautifulSoup as Soup
+from src.entity.Tender import Tender
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-import re
+
+def extract_text(xml_doc: Soup):
+    tag_re = re.compile(r'<[^>]+>')
+    ti_text = tag_re.sub('', xml_doc.prettify())
+    ti_text = ti_text.replace("\n", "")
+    return ti_text
+
 
 class TedExtractor:
 
-    def extract(self, xml_doc, language):
+    def extract(self, xml_doc: Soup, languages: List[str]):
 
         # parse document id
         ted_export = xml_doc.findAll(re.compile("TED_EXPORT"))[0]
@@ -21,32 +32,29 @@ class TedExtractor:
                     tender_cpvs.append(cpv_code["CODE"])
                 except:
                     pass
-            contract["cpv"] = cpvs
         except:
             logger.error("Could not retrieve CPV for contract")
             logger.error(xml_doc.prettify())
             raise Exception("could not retrieve CPV for contract")
 
-
         tender = Tender(tender_id, tender_cpvs)
 
-
         # extract title and description for each language
-        for lg in lang:
-            
+        for lg in languages:
+
             title = None
             short_desc = None
 
             try:
                 ml_titles_section = xml_doc.findAll(re.compile("ML_TITLES"))
                 if ml_titles_section:
-                    ml_ti_doc = ml_titles_section[0].findAll(re.compile("ML_TI_DOC"),{"LG": lg})
+                    ml_ti_doc = ml_titles_section[0].findAll(re.compile("ML_TI_DOC"), {"LG": lg})
                     if ml_ti_doc:
                         ti_text = ml_ti_doc[0].findAll(re.compile("TI_TEXT"))[0]
                         title = extract_text(ti_text)
             except:
-                logger.error(f"Error while parsing title at contract {doc_id}")
-            
+                logger.debug(f"could not parse title at contract {tender_id}")
+
             try:
                 f02_2014 = xml_doc.findAll(re.compile(r'F[0-9][0-9]_2014'), {"LG": lg})
                 if f02_2014:
@@ -61,7 +69,7 @@ class TedExtractor:
                         if not short_desc:
                             short_desc = extract_text(object_contract.findAll(re.compile('SHORT_DESC'))[0])
             except:
-                logger.error(f"Could not pass Fxx_2014 document")  
+                logger.debug(f"could not parse Fxx_2014 document")
 
             try:
                 f02_2014 = xml_doc.findAll(re.compile("CONTRACT"), {"LG": lg})
@@ -75,10 +83,11 @@ class TedExtractor:
                         if not title:
                             title = extract_text(object_contract.findAll(re.compile('TITLE_CONTRACT'))[0])
                         if not short_desc:
-                            short_desc = extract_text(object_contract.findAll(re.compile('SHORT_CONTRACT_DESCRIPTION'))[0])
+                            short_desc = extract_text(
+                                object_contract.findAll(re.compile('SHORT_CONTRACT_DESCRIPTION'))[0])
             except:
-                logger.error(f"Could not pass CONTRACT document")
+                logger.debug(f"could not parse CONTRACT document")
 
-            tender.add_language_entity(lg, title, short_descr)
+            tender.add_language_entity(lg, title, short_desc)
 
         return tender
