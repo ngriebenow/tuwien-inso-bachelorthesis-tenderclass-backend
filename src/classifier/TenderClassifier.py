@@ -1,0 +1,5 @@
+class TenderClassifier:
+
+
+
+    def 
