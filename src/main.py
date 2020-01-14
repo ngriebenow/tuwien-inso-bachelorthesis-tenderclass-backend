@@ -1,3 +1,5 @@
+from fetcher.TenderFetcher import TenderFetcher
+
 from flask import Flask
 app = Flask(__name__)
 

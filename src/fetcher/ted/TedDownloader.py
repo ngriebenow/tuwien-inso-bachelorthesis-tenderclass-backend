@@ -1,3 +1,4 @@
+from typing import List
 import base64
 import lxml
 from bs4 import BeautifulSoup as Soup
@@ -11,7 +12,7 @@ class TedDownloader:
     
     TED_URL_SEARCH = "https://ted.europa.eu/api/v2.0/notices/search"
 
-    def get_xml_contracts(self, page : int, count : int, search_criteria = "" : str, page_offset = 0 : int) -> List[Soup]:
+    def get_xml_contracts(self, page : int, count : int, search_criteria : str = "", page_offset : int = 0) -> List[Soup]:
 
         #TD=[\"Contract notice\"] AND CY=[UK]
         querystring = {"fields":"CONTENT", "pageNum":str(page + page_offset),"pageSize":str(count),"q":"TD=[\"Contract notice\"]" + search_criteria, "reverseOrder":"false","scope":"3","sortField":"ND"}

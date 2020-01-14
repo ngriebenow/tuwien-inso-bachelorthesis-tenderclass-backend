@@ -1,4 +1,4 @@
-from TenderLanguageEntity import TenderLanguageEntity
+from entity.TenderLanguageEntity import TenderLanguageEntity
 
 class Tender:
 

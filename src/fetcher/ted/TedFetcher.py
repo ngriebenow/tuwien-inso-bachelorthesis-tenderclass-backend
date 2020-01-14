@@ -1,4 +1,8 @@
+from typing import List
 
+from entity.Tender import Tender
+from fetcher.ted.TedDownloader import TedDownloader
+from fetcher.ted.TedExtractor import TedExtractor
 class TedFetcher:
 
     def __init__(self):
@@ -7,7 +11,7 @@ class TedFetcher:
 
     MAX_PAGE_COUNT = 100
 
-    def get(self, count : int, load_documents = False : bool, search_criteria = "" : str, languages = ["DE"] : List[str], page_offset = 0 : int) -> List[Tender]:
+    def get(self, count : int, load_documents : bool = False, search_criteria : str = "", languages : List[str] = ["DE"], page_offset : int = 0) -> List[Tender]:
 
         ted_docs = []
         page = 1
