@@ -1,6 +1,4 @@
 from typing import List
-
-from src.entity import Tender
 from src.fetcher.ted.TedDownloader import TedDownloader
 from src.fetcher.ted.TedExtractor import TedExtractor
 
@@ -12,7 +10,7 @@ class TedFetcher:
         self.ted_extractor = TedExtractor()
 
     def get(self, count: int, load_documents: bool = False, search_criteria: str = "", languages: List[str] = ["DE"],
-            page_offset: int = 0) -> List[Tender]:
+            page_offset: int = 0):
 
         ted_docs = []
         page = 1
