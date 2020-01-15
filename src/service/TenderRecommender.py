@@ -9,9 +9,8 @@ class TenderRecommender:
         self.tender_fetcher = TenderFetcher()
         self.tender_model = TenderModel()
 
-    def get_recommendations(self, date):
-        # TODO add date, count
-        tenders = self.tender_fetcher.get(0, search_criteria=" AND PD=[" + datetime.strftime(date, "%Y%m%d") + "]")
+    def get_recommendations(self, count, date):
+        tenders = self.tender_fetcher.get(count, search_criteria=" AND PD=[" + datetime.strftime(date, "%Y%m%d") + "]")
         selected_tenders = self.tender_model.classify(tenders)
         return selected_tenders
 

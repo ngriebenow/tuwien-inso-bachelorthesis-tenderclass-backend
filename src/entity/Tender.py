@@ -18,7 +18,7 @@ class Tender:
     def get_description(self, language):
         return self.lang_entities[language].description
 
-    def get_json(self):
+    def get_dict(self):
         contract = {"id": self.id, "cpvs": self.cpvs}
         lang_list = []
         for k,v in self.lang_entities.items():
@@ -28,4 +28,4 @@ class Tender:
             lang_list.append(lang_entry)
         contract["text"] = lang_list
 
-        return json.dumps(contract)
+        return contract

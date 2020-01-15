@@ -4,10 +4,32 @@ import numpy as np
 import pandas as pd
 
 
+args = {
+    'train_batch_size': 8,
+    'eval_batch_size': 8,
+
+    'gradient_accumulation_steps': 1,
+    'num_train_epochs': 1,
+    'weight_decay': 0,
+    'learning_rate': 4e-2,
+    'adam_epsilon': 1e-8,
+    'warmup_steps': 0,
+    'max_grad_norm': 1.0,
+
+    'logging_steps': 50,
+    'evaluate_during_training': False,
+    'save_steps': 2000,
+    'eval_all_checkpoints': False,
+
+    'overwrite_output_dir': True,
+    'reprocess_input_data': True,
+}
+
+
 class TenderModel:
 
     def __init__(self):
-        self.model = ClassificationModel('bert', './outputs/', use_cuda=False)
+        self.model = ClassificationModel('bert', './outputs/', use_cuda=False, args=args)
 
     def convert_to_input(self, tenders):
         titles = list(map(lambda x: x.get_title("DE"), tenders))
@@ -32,4 +54,4 @@ class TenderModel:
         self.model.train_model(data_input)
 
     def create_new_model(self):
-        self.model = ClassificationModel('bert', 'bert-base-german-cased', use_cuda=False, args={'overwrite_output_dir': True})
+        self.model = ClassificationModel('bert', 'bert-base-german-cased', use_cuda=False, args=args)

@@ -11,9 +11,10 @@ tender_trainer = TenderTrainer()
 
 @app.route("/api/v1/model/recommendations", methods=['GET'])
 def get_recommendations():
+    count = int(request.args.get('count'))
     today = date.today()
-    tenders = tender_recommender.get_recommendations(today)
-    return jsonify(list(map(lambda x: x.get_json(), tenders)))
+    tenders = tender_recommender.get_recommendations(count, today)
+    return jsonify(list(map(lambda x: x.get_dict(), tenders)))
 
 
 @app.route("/api/v1/model/train", methods=['POST'])
@@ -34,7 +35,7 @@ def post_create_new():
     pos_search_criteria = body["pos_search_criteria"]
     neg_search_criteria = body["neg_search_criteria"]
 
-    tender_trainer.create_and_init(pos_number,pos_search_criteria, neg_number, neg_search_criteria)
+    tender_trainer.create_and_init(pos_number, pos_search_criteria, neg_number, neg_search_criteria)
 
     return "ok"
 
