@@ -3,7 +3,7 @@ from src.fetcher.TenderFetcher import TenderFetcher
 from datetime import datetime
 
 
-class Recommender:
+class TenderRecommender:
 
     def __init__(self):
         self.tender_fetcher = TenderFetcher()
