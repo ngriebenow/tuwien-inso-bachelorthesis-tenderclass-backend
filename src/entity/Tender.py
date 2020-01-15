@@ -1,4 +1,5 @@
-from entity.TenderLanguageEntity import TenderLanguageEntity
+from src.entity.TenderLanguageEntity import TenderLanguageEntity
+import json
 
 class Tender:
 
@@ -16,3 +17,15 @@ class Tender:
 
     def get_description(self, language):
         return self.lang_entities[language].description
+
+    def get_json(self):
+        contract = {"id": self.id, "cpvs": self.cpvs}
+        lang_list = []
+        for k,v in self.lang_entities.items():
+            lang_entry = {}
+            lang_entry["title"] = v.title
+            lang_entry["description"] = v.description
+            lang_list.append(lang_entry)
+        contract["text"] = lang_list
+
+        return json.dumps(contract)

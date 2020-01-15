@@ -1,6 +1,7 @@
 from typing import List
 from src.fetcher.ted.TedDownloader import TedDownloader
 from src.fetcher.ted.TedExtractor import TedExtractor
+import sys
 
 class TedFetcher:
     MAX_PAGE_COUNT = 100
@@ -11,6 +12,9 @@ class TedFetcher:
 
     def get(self, count: int, load_documents: bool = False, search_criteria: str = "", languages: List[str] = ["DE"],
             page_offset: int = 0):
+
+        if count <= 0:
+            count = sys.maxsize
 
         ted_docs = []
         page = 1
