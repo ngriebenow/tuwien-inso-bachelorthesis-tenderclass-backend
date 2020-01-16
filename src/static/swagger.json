@@ -1,0 +1,222 @@
+
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "Backend for Machine Learning solution to screen public tenders automatically.",
+    "version": "1.0.0",
+    "title": "tenderclass-backend",
+    "contact": {
+      "email": "e1617265@student.tuwien.ac.at"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000/api/v1"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Tender Data",
+      "description": "API for all TED tenders"
+    },
+    {
+      "name": "ML Model",
+      "description": "API for the Machine Learning Model"
+    }
+  ],
+  "paths": {
+    "/tenders": {
+      "get": {
+        "tags": [
+          "Tender Data"
+        ],
+        "parameters": [
+          {
+            "name": "count",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "summary": "Returns all tenders",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/tender"
+            }
+          }
+        }
+      }
+    },
+    "/model/recommendations": {
+      "get": {
+        "tags": [
+          "ML Model"
+        ],
+        "parameters": [
+          {
+            "name": "count",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "summary": "Returns today's tender recommendations",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/tender"
+            }
+          }
+        }
+      }
+    },
+    "/model/train": {
+      "post": {
+        "tags": [
+          "ML Model"
+        ],
+        "summary": "Trains the existing model with new tenders",
+        "requestBody": {
+          "description": "JSON of list of tenders and list of labels",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/trainingtuples"
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/model/new": {
+      "post": {
+        "tags": [
+          "ML Model"
+        ],
+        "summary": "Create a new model",
+        "requestBody": {
+          "description": "Model training configuration",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/trainingconfiguration"
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "tender": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "string"
+          },
+          "cpvs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "text": {
+            "type": "object",
+            "properties": {
+              "DE": {
+                "type": "object",
+                "additionalproperties": {
+                  "$ref": "#/components/schemas/languageentity"
+                }
+              }
+            }
+          }
+        }
+      },
+      "trainingtuples": {
+        "type": "object",
+        "properties": {
+          "ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "example": {
+          "ids": ["EU00001", "EU00002", "EU00003"],
+          "labels": [1, 0, 1]
+        }
+      },
+      "trainingconfiguration": {
+        "type": "object",
+        "properties": {
+          "pos_number": {
+            "type": "integer",
+            "format": "integer"
+          },
+          "neg_number": {
+            "type": "integer",
+            "format": "integer"
+          },
+          "pos_search_criteria": {
+            "type": "integer",
+            "format": "integer"
+          },
+          "neg_search_criteria": {
+            "type": "integer",
+            "format": "integer"
+          }
+        }
+      },
+      "languageentity": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "format": "string"
+          },
+          "description": {
+            "type": "string",
+            "format": "string"
+          }
+        },
+        "example": {
+          "title": "Software- und Systemprogrammierung für hauseigenes ERP-System",
+          "description": "Für unser hauseigenes ERP-System soll ein Erweiterungsmodul entwickelt werden, das erlaubt, Python-Skripte einzubetten."
+        }
+      }
+    }
+  }
+}

@@ -24,10 +24,10 @@ class Tender:
 
     def get_dict(self):
         contract = {"id": self.id, "cpvs": self.cpvs}
-        lang_list = []
+        lang_list = {}
         for k, v in self.lang_entities.items():
             lang_entry = {"title": v.title, "description": v.description}
-            lang_list.append(lang_entry)
+            lang_list[k] = lang_entry
         contract["text"] = lang_list
 
         return contract

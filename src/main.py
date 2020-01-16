@@ -1,12 +1,34 @@
 from flask import Flask, request, jsonify
+from flask_swagger_ui import get_swaggerui_blueprint
+
+from src.fetcher.TenderFetcher import TenderFetcher
 from src.service.TenderRecommender import TenderRecommender
 from src.service.TenderTrainer import TenderTrainer
 from datetime import date
 
+
 app = Flask(__name__)
+
+SWAGGER_URL = '/swagger'
+API_URL = '/static/swagger.json'
+SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'tenderclass-backend': "API specification for the Machine Learning classification solution for public tenders"
+    }
+)
+app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 
 tender_recommender = TenderRecommender()
 tender_trainer = TenderTrainer()
+
+
+@app.route("/api/v1/tenders", methods=['GET'])
+def get_all():
+    count = int(request.args.get('count'))
+    tenders = tender_recommender.get_all(count)
+    return jsonify(list(map(lambda x: x.get_dict(), tenders)))
 
 
 @app.route("/api/v1/model/recommendations", methods=['GET'])

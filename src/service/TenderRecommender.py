@@ -17,3 +17,7 @@ class TenderRecommender:
         selected_tenders = self.tender_model.classify(tenders)
         return selected_tenders
 
+    def get_all(self, count):
+        tenders = self.tender_fetcher.get(count)
+        return tenders
+
