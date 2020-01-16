@@ -16,6 +16,9 @@ def extract_text(xml_doc: Soup):
 
 
 class TedExtractor:
+    """
+    This class converts the xml version of one tender to the entity.
+    """
 
     def extract(self, xml_doc: Soup, languages: List[str]):
 
@@ -45,6 +48,7 @@ class TedExtractor:
             title = None
             short_desc = None
 
+            # first format of contract
             try:
                 ml_titles_section = xml_doc.findAll(re.compile("ML_TITLES"))
                 if ml_titles_section:
@@ -53,8 +57,9 @@ class TedExtractor:
                         ti_text = ml_ti_doc[0].findAll(re.compile("TI_TEXT"))[0]
                         title = extract_text(ti_text)
             except:
-                logger.debug(f"could not parse title at contract {tender_id}")
+                logger.debug(f"could not parse first format of contract {tender_id}")
 
+            # second format of contract
             try:
                 f02_2014 = xml_doc.findAll(re.compile(r'F[0-9][0-9]_2014'), {"LG": lg})
                 if f02_2014:
@@ -69,8 +74,9 @@ class TedExtractor:
                         if not short_desc:
                             short_desc = extract_text(object_contract.findAll(re.compile('SHORT_DESC'))[0])
             except:
-                logger.debug(f"could not parse Fxx_2014 document")
+                logger.debug(f"could not parse second format of contract {tender_id}")
 
+            # third format of contract
             try:
                 f02_2014 = xml_doc.findAll(re.compile("CONTRACT"), {"LG": lg})
                 if f02_2014:
@@ -86,7 +92,7 @@ class TedExtractor:
                             short_desc = extract_text(
                                 object_contract.findAll(re.compile('SHORT_CONTRACT_DESCRIPTION'))[0])
             except:
-                logger.debug(f"could not parse CONTRACT document")
+                logger.debug(f"could not parse third format of contract {tender_id}")
 
             tender.add_language_entity(lg, title, short_desc)
 

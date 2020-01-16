@@ -2,7 +2,11 @@ from src.classifier.TenderModel import TenderModel
 from src.fetcher.TenderFetcher import TenderFetcher
 import random
 
+
 class TenderTrainer:
+    """
+    This class cooordinates training and creation of the machine learning model as well as preparation of data.
+    """
 
     def __init__(self):
         self.tender_fetcher = TenderFetcher()

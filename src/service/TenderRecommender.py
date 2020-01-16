@@ -4,6 +4,9 @@ from datetime import datetime
 
 
 class TenderRecommender:
+    """
+    This class gets all tenders from today, classifies them and returns only the positive tenders.
+    """
 
     def __init__(self):
         self.tender_fetcher = TenderFetcher()

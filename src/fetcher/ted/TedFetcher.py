@@ -3,7 +3,13 @@ from src.fetcher.ted.TedDownloader import TedDownloader
 from src.fetcher.ted.TedExtractor import TedExtractor
 import sys
 
+
 class TedFetcher:
+    """
+    This class fetches the tenders from the TED downlaoder, parses them and returns them as list of tender entities.
+    """
+
+    # maximum number of tenders which should be loaded per API call to the TED database
     MAX_PAGE_COUNT = 100
 
     def __init__(self):

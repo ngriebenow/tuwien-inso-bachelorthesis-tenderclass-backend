@@ -3,6 +3,10 @@ from src.fetcher.ted.TedFetcher import TedFetcher
 
 
 class TenderFetcher:
+    """
+    This class fetches tenders from provides databases.
+    Currently, only TED serves as database.
+    """
 
     def __init__(self):
         self.ted_fetcher = TedFetcher()

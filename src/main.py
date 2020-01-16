@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from src.service.TenderRecommender import TenderRecommender
-from datetime import date
 from src.service.TenderTrainer import TenderTrainer
+from datetime import date
 
 app = Flask(__name__)
 
