@@ -2,7 +2,10 @@ from typing import List
 from simpletransformers.classification import ClassificationModel
 import numpy as np
 import pandas as pd
+import logging
 
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 args = {
     'learning_rate': 1e-4,
@@ -16,7 +19,11 @@ class TenderModel:
     """
 
     def __init__(self):
-        self.model = ClassificationModel('bert', './outputs/', use_cuda=False, args=args)
+        try:
+            self.model = ClassificationModel('bert', './outputs/', use_cuda=False, args=args)
+        except Exception as ex:
+            logger.error(f"could not load model from /outputs due to {str(ex)}, creating new model")
+            self.create_new_model()
 
     def __convert_to_input(self, tenders):
         titles = list(map(lambda x: x.get_title("DE"), tenders))
