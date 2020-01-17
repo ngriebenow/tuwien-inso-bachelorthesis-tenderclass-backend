@@ -1,3 +1,7 @@
+import os
+import sys
+sys.path.append(os.getcwd()[:os.getcwd().index('src')])
+
 from flask import Flask, request, jsonify
 from flask_swagger_ui import get_swaggerui_blueprint
 
