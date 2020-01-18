@@ -6,11 +6,15 @@ from flask import Flask, request, jsonify
 from flask_swagger_ui import get_swaggerui_blueprint
 from flask_cors import CORS
 
-from src.fetcher.TenderFetcher import TenderFetcher
 from src.service.TenderRecommender import TenderRecommender
 from src.service.TenderTrainer import TenderTrainer
 from datetime import date
+import logging
 
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+logging.basicConfig(level=logging.INFO)
+logger.info("start tenderclass-backend")
 
 app = Flask(__name__)
 CORS(app)
