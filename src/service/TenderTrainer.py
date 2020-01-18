@@ -1,7 +1,10 @@
 from src.classifier.TenderModel import TenderModel
 from src.fetcher.TenderFetcher import TenderFetcher
 import random
+import logging
 
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 class TenderTrainer:
     """
@@ -31,6 +34,8 @@ class TenderTrainer:
         labelled_tenders = list(zip(pos_tenders, pos_labels)) + list(zip(neg_tenders, neg_labels))
 
         random.shuffle(labelled_tenders)
+
+        logger.info("tenders successfully downloaded and labelled")
 
         self.tender_model.create_new_model()
         self.tender_model.train(labelled_tenders)

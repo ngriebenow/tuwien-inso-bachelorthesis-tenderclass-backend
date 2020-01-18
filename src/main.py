@@ -4,6 +4,7 @@ sys.path.append(os.getcwd()[:os.getcwd().index('src')])
 
 from flask import Flask, request, jsonify
 from flask_swagger_ui import get_swaggerui_blueprint
+from flask_cors import CORS
 
 from src.fetcher.TenderFetcher import TenderFetcher
 from src.service.TenderRecommender import TenderRecommender
@@ -12,6 +13,7 @@ from datetime import date
 
 
 app = Flask(__name__)
+CORS(app)
 
 SWAGGER_URL = '/swagger'
 API_URL = '/static/swagger.json'

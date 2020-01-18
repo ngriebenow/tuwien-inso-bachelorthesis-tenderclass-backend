@@ -1,5 +1,5 @@
 from typing import List
-from simpletransformers.classification import ClassificationModel
+
 import numpy as np
 import pandas as pd
 import logging
@@ -18,18 +18,25 @@ class TenderModel:
     This class provides the Machine Learning model and classifies tenders based on previous training data.
     """
 
+    def load_model(self):
+        if not self.model:
+            from simpletransformers.classification import ClassificationModel
+            try:
+                self.model = ClassificationModel('bert', './outputs/', use_cuda=False, args=args)
+            except Exception as ex:
+                logger.error(f"could not load model from /outputs due to {str(ex)}, creating new model")
+                self.create_new_model()
+
     def __init__(self):
-        try:
-            self.model = ClassificationModel('bert', './outputs/', use_cuda=False, args=args)
-        except Exception as ex:
-            logger.error(f"could not load model from /outputs due to {str(ex)}, creating new model")
-            self.create_new_model()
+        self.model = None
 
     def __convert_to_input(self, tenders):
         titles = list(map(lambda x: x.get_title("DE"), tenders))
         return titles
 
     def classify(self, tenders):
+        self.load_model()
+
         titles = self.__convert_to_input(tenders)
         predictions, raw_output = self.model.predict(titles)
         tuples = zip(tenders, predictions)
@@ -38,6 +45,7 @@ class TenderModel:
         return selected_tenders
 
     def train(self, labelled_tenders):
+        self.load_model()
 
         tenders = [i for i, j in labelled_tenders]
         labels = [j for i, j in labelled_tenders]
@@ -47,4 +55,5 @@ class TenderModel:
         self.model.train_model(data_input)
 
     def create_new_model(self):
+        from simpletransformers.classification import ClassificationModel
         self.model = ClassificationModel('bert', 'bert-base-german-cased', use_cuda=False, args=args)

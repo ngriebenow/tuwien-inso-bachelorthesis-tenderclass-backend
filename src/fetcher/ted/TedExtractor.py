@@ -11,7 +11,7 @@ logger.setLevel(logging.INFO)
 def extract_text(xml_doc: Soup):
     tag_re = re.compile(r'<[^>]+>')
     ti_text = tag_re.sub('', xml_doc.prettify())
-    ti_text = ti_text.replace("\n", "")
+    ti_text = ti_text.replace("\n", "").strip()
     return ti_text
 
 
@@ -28,11 +28,11 @@ class TedExtractor:
 
         # parse cpv code
         try:
-            tender_cpvs = []
+            tender_cpvs = set([])
             cpv_codes = xml_doc.findAll(re.compile("(CPV_CODE)|(ORIGINAL_CPV)"))
             for cpv_code in cpv_codes:
                 try:
-                    tender_cpvs.append(cpv_code["CODE"])
+                    tender_cpvs.add(cpv_code["CODE"])
                 except:
                     pass
         except:
