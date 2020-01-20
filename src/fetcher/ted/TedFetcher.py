@@ -10,7 +10,7 @@ class TedFetcher:
     """
 
     # maximum number of tenders which should be loaded per API call to the TED database
-    MAX_PAGE_COUNT = 100
+    MAX_PAGE_COUNT = 1000
 
     def __init__(self):
         self.ted_downloader = TedDownloader()
