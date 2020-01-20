@@ -13,7 +13,7 @@ args = {
 }
 
 
-class TenderModel:
+class TransformerTenderModel:
     """
     This class provides the Machine Learning model and classifies tenders based on previous training data.
     """

@@ -1,4 +1,4 @@
-from src.classifier.TenderModel import TenderModel
+from src.classifier.TransformerTenderModel import TransformerTenderModel
 from src.fetcher.TenderFetcher import TenderFetcher
 import random
 import logging
@@ -13,7 +13,7 @@ class TenderTrainer:
 
     def __init__(self):
         self.tender_fetcher = TenderFetcher()
-        self.tender_model = TenderModel()
+        self.tender_model = TransformerTenderModel()
 
     def train(self, tender_ids, labels):
         search_arg = " OR ".join(tender_ids)
