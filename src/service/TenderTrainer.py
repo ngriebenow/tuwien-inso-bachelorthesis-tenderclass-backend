@@ -6,6 +6,7 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+
 class TenderTrainer:
     """
     This class cooordinates training and creation of the machine learning model as well as preparation of data.
@@ -39,9 +40,8 @@ class TenderTrainer:
 
         random.shuffle(labelled_tenders)
 
-        logger.info("tenders successfully downloaded and labelled")
-
         self.tender_model.train(labelled_tenders)
+        logger.info("tenders successfully downloaded and labelled")
 
     def train_from_entities(self, neg_tenders, pos_tenders):
         pos_labels = [1] * len(pos_tenders)
