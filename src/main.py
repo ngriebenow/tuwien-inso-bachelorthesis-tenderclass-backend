@@ -37,8 +37,9 @@ tender_persistence = TenderPersistence()
 @app.route("/api/v1/persistence/save", methods=['POST'])
 def post_save():
     path = request.json["path"]
+    search_criteria = request.json["pos_search_criteria"]
     count = int(request.args.get('count'))
-    tenders = tender_recommender.get_all(count)
+    tenders = tender_recommender.get_all(count, search_criteria=search_criteria)
     tender_persistence.save(tenders, path)
 
     return "ok"

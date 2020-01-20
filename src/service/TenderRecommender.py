@@ -19,7 +19,7 @@ class TenderRecommender:
             self.cached_selected_tenders = self.tender_model.classify(tenders)
         return self.cached_selected_tenders
 
-    def get_all(self, count):
-        tenders = self.tender_fetcher.get(count)
+    def get_all(self, count, search_criteria):
+        tenders = self.tender_fetcher.get(count, search_criteria=search_criteria)
         return tenders
 
