@@ -40,4 +40,14 @@ class TenderTrainer:
         self.tender_model.create_new_model()
         self.tender_model.train(labelled_tenders)
 
+    def train_from_entities(self, neg_tenders, pos_tenders):
+        pos_labels = [1] * len(pos_tenders)
+        neg_labels = [0] * len(neg_tenders)
+
+        labelled_tenders = list(zip(pos_tenders, pos_labels)) + list(zip(neg_tenders, neg_labels))
+
+        random.shuffle(labelled_tenders)
+
+        self.tender_model.train(labelled_tenders)
+
 

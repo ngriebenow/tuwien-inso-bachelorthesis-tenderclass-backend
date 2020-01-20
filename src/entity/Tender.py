@@ -1,3 +1,5 @@
+from typing import List
+
 from src.entity.TenderLanguageEntity import TenderLanguageEntity
 
 
@@ -7,10 +9,22 @@ class Tender:
     where each of which is a collection of title and description in a certain language.
     """
 
-    def __init__(self, id, cpvs):
+    @classmethod
+    def from_json_dict(cls, serialized_dict):
+        id = serialized_dict["id"]
+        cpvs = serialized_dict["cpvs"]
+        lang_entities = {}
+        for e in serialized_dict["languageentities"]:
+            lang_entry = TenderLanguageEntity(e["title"], e["description"])
+            lang_entities[e["language"]] = lang_entry
+        return cls(id, cpvs, lang_entities)
+
+    def __init__(self, id: str, cpvs: List[str], lang_entities=None):
         self.id = id
         self.cpvs = cpvs
-        self.lang_entities = {}
+        if lang_entities is None:
+            lang_entities = {}
+        self.lang_entities = lang_entities
 
     def add_language_entity(self, language_key, title, description=""):
         entity = TenderLanguageEntity(title, description)
