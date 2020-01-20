@@ -1,6 +1,7 @@
 import os
 import sys
 
+from src.classifier.SimpleTenderModel import SimpleTenderModel
 from src.persistence.TenderPersistence import TenderPersistence
 
 sys.path.append(os.getcwd()[:os.getcwd().index('src')])
@@ -29,15 +30,16 @@ SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
 )
 app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 
-tender_recommender = TenderRecommender()
-tender_trainer = TenderTrainer()
+tender_model = SimpleTenderModel()
+tender_recommender = TenderRecommender(tender_model)
+tender_trainer = TenderTrainer(tender_model)
 tender_persistence = TenderPersistence()
 
 
 @app.route("/api/v1/persistence/save", methods=['POST'])
 def post_save():
     path = request.json["path"]
-    search_criteria = request.json["pos_search_criteria"]
+    search_criteria = request.json["search_criteria"]
     count = int(request.args.get('count'))
     tenders = tender_recommender.get_all(count, search_criteria=search_criteria)
     tender_persistence.save(tenders, path)
@@ -51,20 +53,19 @@ def post_train_from_persistence():
     pos_path = request.json["pos_path"]
     neg_tenders = tender_persistence.load(neg_path)
     pos_tenders = tender_persistence.load(pos_path)
-
     tender_trainer.train_from_entities(neg_tenders, pos_tenders)
 
     return "ok"
 
 
-@app.route("/api/v1/tenders", methods=['GET'])
+@app.route("/api/v1/web", methods=['GET'])
 def get_all():
     count = int(request.args.get('count'))
     tenders = tender_recommender.get_all(count)
     return jsonify(list(map(lambda x: x.get_dict(), tenders)))
 
 
-@app.route("/api/v1/model/recommendations", methods=['GET'])
+@app.route("/api/v1/web/recommendations", methods=['GET'])
 def get_recommendations():
     count = int(request.args.get('count'))
     today = date.today()
@@ -72,7 +73,7 @@ def get_recommendations():
     return jsonify(list(map(lambda x: x.get_dict(), tenders)))
 
 
-@app.route("/api/v1/model/train", methods=['POST'])
+@app.route("/api/v1/web/train", methods=['POST'])
 def post_train_from_web():
     body = request.json
     train_tender_ids = body["ids"]

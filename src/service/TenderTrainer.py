@@ -11,9 +11,9 @@ class TenderTrainer:
     This class cooordinates training and creation of the machine learning model as well as preparation of data.
     """
 
-    def __init__(self):
+    def __init__(self, tender_model):
         self.tender_fetcher = TenderFetcher()
-        self.tender_model = TransformerTenderModel()
+        self.tender_model = tender_model
 
     def train(self, tender_ids, labels):
         search_arg = " OR ".join(tender_ids)
