@@ -1,8 +1,10 @@
 from typing import List
-
+from sklearn.metrics import confusion_matrix
 import numpy as np
 import pandas as pd
 import logging
+
+from sklearn.model_selection import train_test_split
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -48,11 +50,22 @@ class TransformerTenderModel:
         self.load_model()
 
         tenders = [i for i, j in labelled_tenders]
+        tenders = self.__convert_to_input(tenders)
         labels = [j for i, j in labelled_tenders]
 
-        titles = self.__convert_to_input(tenders)
-        data_input = pd.DataFrame(zip(titles, labels))
+
+        tenders_train, tenders_test, labels_train, labels_test = train_test_split(tenders, labels, test_size=0.1, random_state=42)
+
+        data_input = pd.DataFrame(zip(tenders_train, labels_train))
+
         self.model.train_model(data_input)
+
+        labels_pred, raw_output = self.model.predict(tenders_test)
+        tn, fp, fn, tp = confusion_matrix(labels_test, labels_pred).ravel()
+        logger.info(f"tn: {tn} fp: {fp}")
+        logger.info(f"fn: {fn} tp:{tp}")
+
+
 
     def create_new_model(self):
         from simpletransformers.classification import ClassificationModel

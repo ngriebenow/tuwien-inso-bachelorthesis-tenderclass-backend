@@ -1,18 +1,19 @@
+import datetime
 import os
 import sys
+sys.path.append(os.getcwd()[:os.getcwd().index('src')])
 
 from src.classifier.SimpleTenderModel import SimpleTenderModel
+from src.classifier.TransformerTenderModel import TransformerTenderModel
 from src.persistence.TenderPersistence import TenderPersistence
-
-sys.path.append(os.getcwd()[:os.getcwd().index('src')])
 
 from flask import Flask, request, jsonify
 from flask_swagger_ui import get_swaggerui_blueprint
 from flask_cors import CORS
-
 from src.service.TenderRecommender import TenderRecommender
 from src.service.TenderTrainer import TenderTrainer
 from datetime import date
+from datetime import datetime
 import logging
 
 logger = logging.getLogger(__name__)
@@ -34,7 +35,7 @@ SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
 )
 app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 
-tender_model = SimpleTenderModel()
+tender_model = TransformerTenderModel()
 tender_recommender = TenderRecommender(tender_model)
 tender_trainer = TenderTrainer(tender_model)
 tender_persistence = TenderPersistence()
@@ -65,15 +66,22 @@ def post_train_from_persistence():
 @app.route("/api/v1/web", methods=['GET'])
 def get_all():
     count = int(request.args.get('count'))
-    tenders = tender_recommender.get_all(count)
+    date_filter = request.args.get('date')
+    search_criteria = ""
+    if date_filter:
+        search_criteria = " AND PD=[" + date_filter + "]"
+    tenders = tender_recommender.get_all(count, search_criteria=search_criteria)
     return jsonify(list(map(lambda x: x.get_dict(), tenders)))
 
 
 @app.route("/api/v1/web/recommendations", methods=['GET'])
 def get_recommendations():
     count = int(request.args.get('count'))
-    today = date.today()
-    tenders = tender_recommender.get_recommendations(count, today)
+    today = request.args.get('date')
+    if today is None:
+        today = datetime.strftime(date.today(), "%Y%m%d")
+    search_criteria = " AND PD=[" + today + "]"
+    tenders = tender_recommender.get_recommendations(count, search_criteria)
     return jsonify(list(map(lambda x: x.get_dict(), tenders)))
 
 

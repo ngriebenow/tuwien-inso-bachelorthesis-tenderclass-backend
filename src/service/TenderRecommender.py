@@ -12,14 +12,15 @@ class TenderRecommender:
         self.tender_fetcher = TenderFetcher()
         self.tender_model = tender_model
         self.cached_selected_tenders = []
+        self.cached_search_criteria = ""
 
-    def get_recommendations(self, count, date):
-        if not self.cached_selected_tenders:
-            tenders = self.tender_fetcher.get(count, search_criteria=" AND PD=[" + datetime.strftime(date, "%Y%m%d") + "]")
+    def get_recommendations(self, count, search_criteria = ""):
+        if not self.cached_selected_tenders or self.cached_selected_tenders != search_criteria:
+            tenders = self.tender_fetcher.get(count, search_criteria=search_criteria)
             self.cached_selected_tenders = self.tender_model.classify(tenders)
         return self.cached_selected_tenders
 
-    def get_all(self, count, search_criteria):
+    def get_all(self, count, search_criteria=""):
         tenders = self.tender_fetcher.get(count, search_criteria=search_criteria)
         return tenders
 

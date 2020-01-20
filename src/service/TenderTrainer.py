@@ -25,6 +25,10 @@ class TenderTrainer:
         self.tender_model.train(labelled_tenders)
 
     def create_and_init(self, pos_number, pos_search_criteria, neg_number, neg_search_criteria):
+        self.tender_model.create_new_model()
+        if (pos_number + neg_number) == 0:
+            return
+
         pos_tenders = self.tender_fetcher.get(pos_number, search_criteria=pos_search_criteria)
         neg_tenders = self.tender_fetcher.get(neg_number, search_criteria=neg_search_criteria)
 
@@ -37,7 +41,6 @@ class TenderTrainer:
 
         logger.info("tenders successfully downloaded and labelled")
 
-        self.tender_model.create_new_model()
         self.tender_model.train(labelled_tenders)
 
     def train_from_entities(self, neg_tenders, pos_tenders):
