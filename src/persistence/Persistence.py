@@ -3,7 +3,7 @@ import json
 from src.entity.Tender import Tender
 
 
-class TenderPersistence:
+class Persistence:
 
     def save(self, tenders, path):
         with open("data/" + path, 'w', encoding='utf8') as json_file:

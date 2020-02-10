@@ -4,14 +4,14 @@ import sys
 sys.path.append(os.getcwd()[:os.getcwd().index('src')])
 
 from src.classifier.SpacyScikitModel import SpacyScikitModel
-from src.classifier.TransformerTenderModel import TransformerTenderModel
-from src.persistence.TenderPersistence import TenderPersistence
+from src.classifier.TransformerModel import TransformerModel
+from src.persistence.Persistence import Persistence
 
 from flask import Flask, request, jsonify
 from flask_swagger_ui import get_swaggerui_blueprint
 from flask_cors import CORS
-from src.service.TenderRecommender import TenderRecommender
-from src.service.TenderTrainer import TenderTrainer
+from src.service.Recommender import Recommender
+from src.service.Trainer import Trainer
 from datetime import date
 from datetime import datetime
 import logging
@@ -38,10 +38,10 @@ SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
 app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 
 tender_model = SpacyScikitModel()
-#tender_model = TransformerTenderModel()
-tender_recommender = TenderRecommender(tender_model)
-tender_trainer = TenderTrainer(tender_model)
-tender_persistence = TenderPersistence()
+#tender_model = TransformerModel()
+tender_recommender = Recommender(tender_model)
+tender_trainer = Trainer(tender_model)
+tender_persistence = Persistence()
 
 
 @app.route("/api/v1/persistence/save", methods=['POST'])

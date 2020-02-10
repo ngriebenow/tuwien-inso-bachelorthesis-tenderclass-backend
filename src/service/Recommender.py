@@ -1,15 +1,15 @@
-from src.classifier.TransformerTenderModel import TransformerTenderModel
-from src.fetcher.TenderFetcher import TenderFetcher
+from src.classifier.TransformerModel import TransformerModel
+from src.fetcher.Fetcher import Fetcher
 from datetime import datetime
 
 
-class TenderRecommender:
+class Recommender:
     """
     This class gets all tenders from today, classifies them and returns only the positive tenders.
     """
 
     def __init__(self, tender_model):
-        self.tender_fetcher = TenderFetcher()
+        self.tender_fetcher = Fetcher()
         self.tender_model = tender_model
         self.cached_selected_tenders = []
         self.cached_search_criteria = ""
