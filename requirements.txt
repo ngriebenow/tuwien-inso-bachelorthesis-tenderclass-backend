@@ -5,3 +5,5 @@ flask
 beautifulsoup4
 flask_swagger_ui
 spaCy
+lxml
+flask_cors

@@ -3,7 +3,7 @@ import os
 import sys
 sys.path.append(os.getcwd()[:os.getcwd().index('src')])
 
-from src.classifier.SimpleTenderModel import SimpleTenderModel
+from src.classifier.SpacyScikitModel import SpacyScikitModel
 from src.classifier.TransformerTenderModel import TransformerTenderModel
 from src.persistence.TenderPersistence import TenderPersistence
 
@@ -18,7 +18,9 @@ import logging
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(format='%(asctime)s %(levelname)-8s %(message)s',
+                    level=logging.INFO,
+                    datefmt='%Y-%m-%d %H:%M:%S')
 logger.info("start tenderclass-backend")
 
 app = Flask(__name__)
@@ -35,7 +37,8 @@ SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
 )
 app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 
-tender_model = TransformerTenderModel()
+tender_model = SpacyScikitModel()
+#tender_model = TransformerTenderModel()
 tender_recommender = TenderRecommender(tender_model)
 tender_trainer = TenderTrainer(tender_model)
 tender_persistence = TenderPersistence()

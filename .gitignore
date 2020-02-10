@@ -1,2 +1,5 @@
 outputs/
 data/
+venv/
+test/
+scikit_model
