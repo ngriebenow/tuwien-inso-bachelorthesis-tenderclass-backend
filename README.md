@@ -15,7 +15,7 @@ What things you need to install the software and how to install them
 
 - [Python 3.7/3.8](https://www.python.org/downloads/)
 - OPTIONAL: If you want to train the TransformerModel on a Nvidia GPU (much faster!): [CUDA Toolkit 10.2](https://developer.nvidia.com/cuda-downloads)
-- OPTIONAL: If you want to deploy it to a hyperscaler cluster: [Docker]() runtime environment
+- OPTIONAL: If you want to deploy it as a Docker container: [Docker](https://www.docker.com/) runtime environment
 
 ### Installing
 
@@ -61,9 +61,17 @@ You can deploy the backend of tenderclass by using a Docker container.
 `$ cd tenderclass-backend`
 
 3. Build the Docker container.<br/>
-`docker build -t="tenderclass-backend" .`
+`$ docker build -t="tenderclass-backend" .`
 
-TODO
+4. Create a new container.<br/>
+`$ docker create tenderclass-backend`
+
+4. Start the docker container. Use the `-p` argument for port forwarding. X:Y indicates that the docker host's port X is forwarded to the container's port Y.<br/>
+`docker start -p 5000:5000 tenderclass-backend`
+
+5. OPTIONAL: Tag the docker container and push it to Dockerhub for using it on a Kubernetes cluster.<br/>
+`docker tag tenderclass-backend <DOCKERHUB_USERNAME>/tcbe`
+`docker push <DOCKERHUB_USERNAME>/tcbe`
 
 ## API Endpoints
 Documentation for the API Endpoints is available in Swagger UI. After starting the web server, enter the following web site into your browser:<br/>
