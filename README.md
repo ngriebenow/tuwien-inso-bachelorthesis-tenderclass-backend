@@ -19,55 +19,55 @@ What things you need to install the software and how to install them
 
 ### Installing
 
-1. Clone this repository into your directory of choice.
+1. Clone this repository into your directory of choice.<br/>
 `$ git clone https://github.com/ngriebenow/tuwien-inso-bachelorthesis-tenderclass-backend`
 
-2. Navigate to the root directory `tenderclass-backend`.
+2. Navigate to the root directory `tenderclass-backend`.<br/>
 `$ cd tenderclass-backend`
 
 3. OPTIONAL: If you want to use a virtual environment, run the following steps:
-- Install the `virtualenv` package.
+- Install the `virtualenv` package.<br/>
 `$ pip install virtualenv`
-- Create a new folder for the virtual environment.
+- Create a new folder for the virtual environment.<br/>
 `$ mkdir venv`
-- Initialize the virtual environment.
+- Initialize the virtual environment.<br/>
 `$ virtualenv venv`
-- Activate the virtual environment.
-Run on Windows: `$ venv\Scripts\activate.bat`
+- Activate the virtual environment.<br/>
+Run on Windows: `$ venv\Scripts\activate.bat`<br/>
 Run on Linux: `$ source venv/bin/activate`
 
-3. Install all the required dependecies using Python packet manager `pip`.
+3. Install all the required dependecies using Python packet manager `pip`.<br/>
 `$ pip install -r requirements.txt`
 
-4. Install the spaCy german language model.
+4. Install the spaCy german language model.<br/>
 `$ python -m spacy download de`
 
-5. Navigate to the `src` directory and start the web server by running `main.py`.
-`$ cd src`
+5. Navigate to the `src` directory and start the web server by running `main.py`.<br/>
+`$ cd src`<br/>
 `$ python main.py`
 
-6. OPTIONAL: Deactive the virtual environment:
-Run on Windows: `$ venv\Scripts\deactivate.bat`
+6. OPTIONAL: Deactive the virtual environment:<br/>
+Run on Windows: `$ venv\Scripts\deactivate.bat`<br/>
 Run on Linux: `$ source venv/bin/deactivate`
 
 ## Deployment
 
 You can deploy the backend of tenderclass by using a Docker container.
 
-1. Clone this repository into your directory of choice.
+1. Clone this repository into your directory of choice.<br/>
 `$ git clone https://github.com/ngriebenow/tuwien-inso-bachelorthesis-tenderclass-backend`
 
-2. Navigate to the root directory `tenderclass-backend`.
+2. Navigate to the root directory `tenderclass-backend`.<br/>
 `$ cd tenderclass-backend`
 
-3. Build the Docker container.
+3. Build the Docker container.<br/>
 `docker build -t="tenderclass-backend" .`
 
 TODO
 
 ## API Endpoints
-Documentation for the API Endpoints is available in Swagger UI. After starting the web server, enter the following web site into your browser:
-[API Documenation](http://localhost:5000/static/swagger.json)
+Documentation for the API Endpoints is available in Swagger UI. After starting the web server, enter the following web site into your browser:<br/>
+[API Documenation](http://localhost:5000/swagger)
 
 ## Architecture
 The back end incorporates the business logic and Machine Learning services including its persistence. By means of Flask, which is a Python package for enabling socket-based endpoints, the back end system makes all its services available via a Representational State Transfer (REST) API. It consists of the following components:

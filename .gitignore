@@ -2,5 +2,7 @@ outputs/
 data/
 venv/
 test/
+runs/
 scikit_model
 cache_dir/
+__pycache__/
