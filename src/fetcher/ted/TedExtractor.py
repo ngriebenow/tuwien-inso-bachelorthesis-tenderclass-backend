@@ -94,6 +94,13 @@ class TedExtractor:
             except:
                 logger.debug(f"could not parse third format of contract {tender_id}")
 
-            tender.add_language_entity(lg, title, short_desc)
+            # extract link
+            try:
+                link = extract_text(xml_doc.findAll(re.compile("URI_DOC"), {"LG": lg})[0])
+            except:
+                logger.debug(f"could not parse link for language {lg}")
+
+
+            tender.add_language_entity(lg, title, short_desc, link)
 
         return tender

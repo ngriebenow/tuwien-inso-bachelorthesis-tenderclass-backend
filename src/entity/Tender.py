@@ -26,8 +26,8 @@ class Tender:
             lang_entities = {}
         self.lang_entities = lang_entities
 
-    def add_language_entity(self, language_key, title, description=""):
-        entity = TenderLanguageEntity(title, description)
+    def add_language_entity(self, language_key, title, description="", link=""):
+        entity = TenderLanguageEntity(title, description, link)
         self.lang_entities[language_key] = entity
 
     def get_title(self, language):
@@ -40,7 +40,7 @@ class Tender:
         contract = {"id": self.id, "cpvs": list(self.cpvs)}
         lang_list = []
         for k, v in self.lang_entities.items():
-            lang_entry = {"language": k, "title": v.title, "description": v.description}
+            lang_entry = {"language": k, "title": v.title, "description": v.description, "link": v.link}
             lang_list.append(lang_entry)
         contract["languageentities"] = lang_list
 
