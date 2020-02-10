@@ -16,41 +16,12 @@
   ],
   "tags": [
     {
-      "name": "Tender Data",
-      "description": "API for all TED tenders"
-    },
-    {
       "name": "ML Model",
       "description": "API for the Machine Learning Model"
     }
   ],
   "paths": {
-    "/tenders": {
-      "get": {
-        "tags": [
-          "Tender Data"
-        ],
-        "parameters": [
-          {
-            "name": "count",
-            "in": "query",
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "summary": "Returns all tenders",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/components/schemas/tender"
-            }
-          }
-        }
-      }
-    },
-    "/model/recommendations": {
+    "/web/recommendations": {
       "get": {
         "tags": [
           "ML Model"
@@ -75,7 +46,7 @@
         }
       }
     },
-    "/model/train": {
+    "/web/train": {
       "post": {
         "tags": [
           "ML Model"
@@ -145,14 +116,12 @@
               "type": "string"
             }
           },
-          "text": {
-            "type": "object",
-            "properties": {
-              "DE": {
-                "type": "object",
-                "additionalproperties": {
-                  "$ref": "#/components/schemas/languageentity"
-                }
+          "languageEntities": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalproperties": {
+                "$ref": "#/components/schemas/languageentity"
               }
             }
           }
@@ -203,6 +172,10 @@
       "languageentity": {
         "type": "object",
         "properties": {
+          "language": {
+            "type": "string",
+            "format": "string"
+          },
           "title": {
             "type": "string",
             "format": "string"
@@ -213,6 +186,7 @@
           }
         },
         "example": {
+          "language": "DE",
           "title": "Software- und Systemprogrammierung für hauseigenes ERP-System",
           "description": "Für unser hauseigenes ERP-System soll ein Erweiterungsmodul entwickelt werden, das erlaubt, Python-Skripte einzubetten."
         }
