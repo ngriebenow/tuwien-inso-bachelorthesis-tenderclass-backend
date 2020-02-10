@@ -3,3 +3,4 @@ data/
 venv/
 test/
 scikit_model
+cache_dir/
